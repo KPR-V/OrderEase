@@ -41,7 +41,7 @@ const LoginPage = async () => {
         <form className="flex flex-col gap-3 justify-center font-bungee" action={handleLogin}>
           <input className="px-3 text-center py-2 rounded-md bg-transparent outline-none border-3 bg-zinc-800" type="email" placeholder="email" name="email" />
           <Passwordfield />
-          <input className="px-5 text-sm sm:text-lg md:text-lg lg:text-xl xl:text-2xl py-2 rounded-md bg-blue-500 text-black " type="submit" value="Login" />
+          <input className="px-5 text-sm sm:text-lg md:text-lg lg:text-xl xl:text-2xl py-2 rounded-md bg-blue-500 cursor-pointer text-black " type="submit" value="Login" />
         </form>
 
         <div className='bg-zinc-800 opacity-90 h-1 w-1/3'></div>

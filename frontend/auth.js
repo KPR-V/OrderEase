@@ -4,6 +4,8 @@ import GitHubProvider from 'next-auth/providers/github';
 import CredentialsProvider from "next-auth/providers/credentials";
 import { CredentialsSignin } from "next-auth";
 import { User } from "@/models/user"
+import { ZodError } from "zod"
+import { signInSchema } from "@/components/formzod.js"
 import { compare } from "bcryptjs";
 import { connectdb } from "@/components/connectdb.js"
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -23,28 +25,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       authorize: async (credentials) => {
+        try {
+          const { email, password } = await signInSchema.parseAsync(credentials);
 
-        const { email, password } = credentials
+          if (!email || !password) {
+            throw new CredentialsSignin("Please provide both email and password");
+          }
 
+          await connectdb(); // Connect to the database
 
-        if (!email || !password) throw new CredentialsSignin("provide both email and password")
+          const user = await User.findOne({ email: email }).select("+password"); // Select password field which is hidden by default
 
-        await connectdb() // connect to database
+          if (!user || !user.password) {
+            throw new CredentialsSignin("Invalid credentials");
+          }
 
-        const user = await User.findOne({ email: email }).select("+password") // select password field which is hidden by default
+          const isMatch = await compare(password, user.password);
 
-        if (!user) throw new CredentialsSignin("invalid credentials")
+          if (!isMatch) {
+            throw new CredentialsSignin("Invalid credentials");
+          }
 
-        if (!user.password) throw new CredentialsSignin("invalid credentials")
-
-        const isMatch = await compare(password, user.password)
-
-        if (!isMatch) throw new CredentialsSignin("invalid credentials")
-
-        // if(!user.isverified) throw new CredentialsSignin("email not verified")
-
-        return { email: user.email, name: user.name, id: user._id }
-
+          return { email: user.email, name: user.name, id: user._id };
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return null; // Return null to indicate failure
+          }
+          throw error; // Rethrow other errors
+        }
       }
     })
   ],
@@ -65,9 +73,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const { email, name, image, id } = user
           await connectdb()
           const alreadyUser = await User.findOne({ email: email })
-          if (!alreadyUser) {
+          
+        if (!alreadyUser) {
             await User.create({ email, name, image, googleId: id })
           }
+           else if(!alreadyUser.googleId){
+            alreadyUser.googleId = id
+            await alreadyUser.save()
+           }          
           return true
         } catch (error) {
           throw new AuthError("error while signing in")
@@ -81,8 +94,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (!alreadyUser) {
             await User.create({ email, name, image, githubId: id })
           }
+          else if(!alreadyUser.githubId){
+            alreadyUser.githubId = id
+            await alreadyUser.save()
+           }
           return true
-        } catch (error) {
+      } catch (error) {
           throw new AuthError("error while signing in")
         }
       }
@@ -93,4 +110,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }
 
   }
-}) 
+});

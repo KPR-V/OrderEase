@@ -34,11 +34,15 @@ const RegisterPage = async () => {
 
             const user = await User.findOne({ email: email })
 
+            const hash = await bcrypt.hash(password, 10)
+
             if (user) {
-              throw new Error('user already exists')
+              user.password = hash
+              await user.save() 
+              redirect('/login')
             }
 
-            const hash = await bcrypt.hash(password, 10)
+            
             await User.create({
               name,
               email,

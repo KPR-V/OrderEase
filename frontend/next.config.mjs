@@ -1,7 +1,24 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-      domains: ['imgs.search.brave.com'],
+      remotePatterns: [
+        {
+          protocol: 'https',
+          hostname: 'imgs.search.brave.com',
+          port: '',
+          pathname: '/**',
+        },
+        {
+
+
+
+
+          protocol: 'https',
+          hostname: 'files.edgestore.dev',
+          port: '',
+          pathname: '/**',
+        }
+      ],
     },
   };
 
