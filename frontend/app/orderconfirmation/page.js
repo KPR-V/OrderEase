@@ -16,29 +16,7 @@ const page = () => {
       setIsPopupVisible(false);
     }, 3000);
   };
-  const order = [
-    {
-      name: "Chole",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat eligendi accusamus velit aperiam porro quod deserunt quibusdam ratione odit id exercitationem obcaecati tenetur sapiente, consequuntur delectus doloribus corrupti voluptatum nobis impedit hic animi libero sint laborum. Quaerat aspernatur distinctio reiciendis quod voluptates asperiores sapiente quidem, temporibus itaque suscipit. Adipisci, corporis.",
-      price: "50",
-      quantity: 1,
-    },
-    {
-      name: "Dish Name",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem nisi excepturi quis deserunt aperiam? Deserunt voluptatibus commodi necessitatibus nesciunt neque, delectus nemo reiciendis enim magni aut fuga rerum unde error praesentium dolores illo veniam dolore.",
-      price: "500",
-      quantity: 5,
-    },
-    {
-      name: "Dish Name 1",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem nisi excepturi quis deserunt aperiam? Deserunt voluptatibus commodi necessitatibus nesciunt neque, delectus nemo reiciendis enim magni aut fuga rerum unde error praesentium dolores illo veniam dolore.lorem ipsum dolor sit amet, consectetur ",
-      price: "5050",
-      quantity: 10,
-    },
-  ];
+  const order = [];
 
 
   return (

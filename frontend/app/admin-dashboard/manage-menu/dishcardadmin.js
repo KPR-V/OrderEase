@@ -2,11 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getdishesfromdb } from '@/components/getdishesfromdb';
+import Link from 'next/link';
+import { deleteDish } from '@/components/getdishesfromdb';
+import { useRouter } from 'next/navigation';
 const DishCard = () => {
   const [dishes, setDishes] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [order, setOrder] = useState([]);
+  const router = useRouter();
   useEffect(() => {
     const fetchDishes = async () => {
       const dishesData = await getdishesfromdb();
@@ -20,9 +24,20 @@ const DishCard = () => {
     setOrder([...order, { ...dish, quantity }]);
   };
 
+  const handleDeleteDish = async (id) => {
+    try {
+      const result = await deleteDish(id);
+      if (result.success) {
+        router.refresh('/admin-dashboard/manage-menu');
+      }
+    } catch (error) {
+      console.error('Error deleting dish:', error.message);
+    }
+  };
 
   return (
     <>
+   
       {dishes.length === 0 ? (
         <h1 className="text-3xl font-bungee font-bold text-center text-black">No dishes found</h1>
       ) : (
@@ -77,6 +92,15 @@ const DishCard = () => {
                   )}
                 </div>
                 <div className='flex justify-around w-full text-black'>
+                <Link href={`/admin-dashboard/manage-menu/editdish/${dish._id}`}>
+                <button className="bg-yellow-500 hover:bg-yellow-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  Edit
+                </button>
+                </Link>
+               
+                <button onClick={() => handleDeleteDish(dish._id)} className="bg-red-500 hover:bg-red-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  Delete
+                </button>
                   <button className="bg-blue-500 hover:bg-blue-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
                    Like
                   </button>

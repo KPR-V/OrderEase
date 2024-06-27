@@ -1,4 +1,4 @@
-import DishCard from '@/app/menu/dishcard.js'
+import DishCard from './dishcardadmin.js'
 import Link from "next/link";
 const Menu = () => {
     
