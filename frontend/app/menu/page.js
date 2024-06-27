@@ -1,8 +1,10 @@
 import DishCard from './dishcard.js'
 import Link from "next/link";
+
 const Menu = () => {
   return (
     <>
+    
       <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Changa" rel="stylesheet" />
 

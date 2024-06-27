@@ -1,14 +1,18 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import getdishesfromdb from '@/components/getdishesfromdb';
-
+import { getdishesfromdb } from '@/components/getdishesfromdb';
+import Link from 'next/link';
+import { deleteDish } from '@/components/getdishesfromdb';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 const DishCard = () => {
   const [dishes, setDishes] = useState([]);
   const [quantity, setQuantity] = useState(0);
   const [expanded, setExpanded] = useState(false);
   const [order, setOrder] = useState([]);
-
+  const router = useRouter();
+  const session = useSession();
   useEffect(() => {
     const fetchDishes = async () => {
       const dishesData = await getdishesfromdb();
@@ -22,8 +26,20 @@ const DishCard = () => {
     setOrder([...order, { ...dish, quantity }]);
   };
 
+  const handleDeleteDish = async (id) => {
+    try {
+      const result = await deleteDish(id);
+      if (result.success) {
+        router.refresh('/admin-dashboard/manage-menu');
+      }
+    } catch (error) {
+      console.error('Error deleting dish:', error.message);
+    }
+  };
+
   return (
     <>
+   
       {dishes.length === 0 ? (
         <h1 className="text-3xl font-bungee font-bold text-center text-black">No dishes found</h1>
       ) : (
@@ -66,21 +82,41 @@ const DishCard = () => {
                         style={{ minWidth: '50px' }}
                       />
                     </label>
-                    <span className='mb-2 lg:mb-0 lg:ml-2'> Price: {dish.price} </span>
+                    <span className='mb-2 lg:mb-0 lg:ml-2'> Price: ₹ {dish.price} </span>
                   </div>
                   {quantity > 0 && (
                     <button
-                      className="bg-red-500 hover:bg-red-700 text-yellow-50 font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 lg:mt-0 w-full lg:w-auto"
+                      className="bg-red-500 hover:bg-red-700 text-black font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 lg:mt-0 w-full lg:w-auto"
                       onClick={() => addItemToOrder(dish, quantity)}
                     >
                       Add Item
                     </button>
                   )}
                 </div>
-                <div>
-                  hi
+                <div className='flex justify-around w-full text-black'>
+                
+                
+                {session?.user && (
+                
+                <>
+                <Link href={`/admin-dashboard/manage-menu/editdish/${dish._id}`}>
+                <button className="bg-yellow-500 hover:bg-yellow-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  Edit
+                </button>
+                </Link>
+               
+                <button onClick={() => handleDeleteDish(dish._id)} className="bg-red-500 hover:bg-red-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  Delete
+                </button>
+               
+                </>
+                )
+                }
+                  <button className="bg-blue-500 hover:bg-blue-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                   Like
+                  </button>
                 </div>
-                 {/* // here i will add the edit dish and delete dish buttons only for session users */}
+                 
               </div>
             </div>
             <style jsx>{`
@@ -95,6 +131,7 @@ const DishCard = () => {
           </React.Fragment>
         ))
       )}
+      
     </>
   );
 };

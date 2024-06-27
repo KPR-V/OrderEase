@@ -1,28 +1,54 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { handlesubmit } from "./handlesubmit";
+import { getDishById, updateDish } from "@/components/getdishesfromdb";
 import { useEdgeStore } from "@/components/edgestore";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
-const AddDish = () => {
+const EditDishPage = () => {
+  const { id } = useParams();
+  const decodedId = decodeURIComponent(id);
+
   const [uploadedFile, setUploadedFile] = useState(null);
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [image, setImage] = useState("");
   const { edgestore } = useEdgeStore();
-  const router = useRouter(); // Use the useRouter hook
+  const router = useRouter();
 
-  const handleFileChange = (event) => {
-    setUploadedFile(event.target.files[0]);
+  useEffect(() => {
+    if (decodedId) {
+      fetchDishData(decodedId);
+    }
+  }, [decodedId]);
+
+  const fetchDishData = async (id) => {
+    try {
+      const dish = await getDishById(id);
+      if (dish) {
+        setDescription(dish.description || "");
+        setName(dish.name || "");
+        setPrice(dish.price || "");
+        setCategory(dish.category || "");
+        setImage(dish.image || "");
+      }
+    } catch (error) {
+      console.error("Error fetching dish data:", error.message);
+    }
   };
 
-  const handleSubmit1 = async (event) => {
-    event.preventDefault();
-    if (!description || !name || !price || !category || !uploadedFile) {
-      alert("Please fill all fields");
+  const handleFileChange = (e) => {
+    setUploadedFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!description || !name || !price || !category) {
+      console.log("Please fill all fields");
       return;
     }
 
@@ -44,25 +70,33 @@ const AddDish = () => {
 
   const filesubmit = async () => {
     try {
-      if (!uploadedFile || !isFileValid(uploadedFile)) {
-        throw new Error("Invalid file type or extension");
+      let fileUrl = image;
+
+      if (uploadedFile) {
+        if (!isFileValid(uploadedFile)) {
+          throw new Error("Invalid file type or extension");
+        }
+
+        const res = await edgestore.publicFiles.upload({ file: uploadedFile });
+
+        if (!res || !res.url) {
+          throw new Error("File upload failed: Invalid response");
+        }
+
+        fileUrl = res.url;
       }
 
-      console.log("Starting file upload:", uploadedFile);
+     const result = await updateDish(decodedId, {
+        description,
+        price,
+        name,
+        category,
+        image: fileUrl ? fileUrl : image,
+      });
+      if(result.success){
+        console.log("Dish updated successfully");
+        router.replace("/admin-dashboard/manage-menu");
 
-      const res = await edgestore.publicFiles.upload({ file: uploadedFile });
-
-      console.log("File upload response:", res);
-
-      if (!res || !res.url) {
-        throw new Error("File upload failed: Invalid response");
-      }
-
-      const fileUrl = res.url;
-
-      const result = await handlesubmit({ description, price, name, category, url: fileUrl });
-      if (result.success) {
-        router.replace('/admin-dashboard/manage-menu'); // Redirect after successful submission
       }
     } catch (error) {
       console.error("Error in file submission:", error.message);
@@ -76,20 +110,18 @@ const AddDish = () => {
   });
 
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-screen">
       <div className="flex bg-slate-500/40 backdrop-blur-md w-2/3 flex-col items-center gap-7 h-full rounded-lg p-5">
-        <h2 className="text-black font-bungee font-bold text-3xl mt-3">Add New Dish</h2>
+        <h2 className="text-black font-bungee font-bold text-3xl mt-3">Edit Dish</h2>
         <div className="w-full max-w-lg mx-auto">
           <div
             className="w-full h-64 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md bg-slate-400/50"
             {...getRootProps()}
           >
-            {uploadedFile ? (
+            {image ? (
               <Image
-                onClick={() => {
-                  setUploadedFile(null);
-                }}
-                src={URL.createObjectURL(uploadedFile)}
+                onClick={() => setImage(null)}
+                src={image ? image : URL.createObjectURL(uploadedFile)}
                 className="p-2 rounded-md object-cover cursor-pointer"
                 alt="Uploaded File"
                 width={300}
@@ -127,10 +159,10 @@ const AddDish = () => {
         <main className="w-full max-w-lg mx-auto">
           <form
             className="w-full p-4 rounded shadow-md bg-zinc-800/80"
-            onSubmit={handleSubmit1}
+            onSubmit={handleSubmit}
           >
             <h2 className="text-2xl mb-4 tracking-wider font-bold text-white font-bungee text-center">
-              Add Details
+              Edit Details
             </h2>
 
             <div className="grid grid-cols-1 gap-4">
@@ -183,14 +215,15 @@ const AddDish = () => {
                   required
                 />
               </div>
-            </div>
-            <div className="flex justify-end mt-4">
-              <button
-                type="submit"
-                className="py-2 px-4 bg-slate-800 text-white rounded-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Add Dish To Menu →
-              </button>
+
+              <div className="col-span-1 text-white">
+                <button
+                  type="submit"
+                  className="w-full font-bungee px-4 py-2 mt-2 tracking-wide text-white bg-teal-800 rounded-md focus:bg-teal-700 focus:outline-none"
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
           </form>
         </main>
@@ -199,4 +232,4 @@ const AddDish = () => {
   );
 };
 
-export default AddDish;
+export default EditDishPage;

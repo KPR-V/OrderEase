@@ -1,7 +1,6 @@
 "use server";
 import { connectdb } from '@/components/connectdb';
 import { Dish } from '@/models/dishes';
-import {  redirect } from 'next/navigation';
 
 export const handlesubmit = async ({ description, name, category, price, url }) => {
   if (!name || !category || !price || !description || !url) {
@@ -24,8 +23,7 @@ export const handlesubmit = async ({ description, name, category, price, url }) 
       category,
     });
 
-    console.log(`Dish ${name} created successfully`);
-   redirect('/admin-dashboard/manage-menu');
+    return { success: true };
   } catch (error) {
     console.error('Error creating dish:', error.message);
     throw new Error('Error creating dish');
