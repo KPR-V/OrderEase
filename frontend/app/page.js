@@ -1,7 +1,19 @@
-
-import Link from "next/link";
+"use client"
+import { getAuth,onAuthStateChanged } from "firebase/auth";
+import app  from "@/components/config";
+import { useRouter } from "next/navigation";
+import React, { useEffect} from "react";
+import Loginforcustomer from "@/components/loginforcustomer";
 const HomePage = () => {
- 
+ const auth = getAuth(app)
+  const router = useRouter()  
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace('/menu')
+      } 
+    })
+  }, [auth,router])
   return (
     <>
       <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
@@ -17,11 +29,12 @@ const HomePage = () => {
             </p>
           </div>
           <div className='w-full lg:w-1/3 flex flex-col justify-center items-center gap-5'>
-            <Link href="/menu">
+            <Loginforcustomer />
+            {/* <Link href="/menu">
               <button type='submit' className='text-sm sm:text-lg md:text-lg lg:text-xl xl:text-2xl font-changa cursor-pointer rounded-md border-3 text-black bg-custom-red py-2 px-3 outline-none'>
                 View Menu
               </button>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>

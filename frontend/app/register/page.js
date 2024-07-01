@@ -3,7 +3,7 @@ import Passwordfield from '../login/passwordfield';
 import { User } from '@/models/user';
 import bcrypt from 'bcryptjs';
 import { auth } from '@/auth';
-
+import { signUpSchema } from '@/components/formzod';
 import { redirect } from 'next/navigation';
 import {connectdb} from "@/components/connectdb.js"
 const RegisterPage = async () => {
@@ -23,11 +23,16 @@ const RegisterPage = async () => {
             const name = formdata.get('name')
             const email = formdata.get('email')
             const password = formdata.get('password')
-
-
+            
             if (!name || !email || !password) {
               throw new Error('please fill all fields')
             }
+            
+                        try {
+                         await signUpSchema.parseAsync({ name, email, password })
+                        } catch (error) {
+                          throw new Error("Invalid input")
+                        }
 
             await connectdb() // connect to database
 

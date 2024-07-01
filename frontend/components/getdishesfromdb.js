@@ -67,3 +67,15 @@ export const deleteDish = async (id) => {
     throw error;
   }
 };
+
+
+export const getCategoriesFromDB = async () => {
+  try {
+    await connectdb();
+    const categories = await Dish.distinct('category');
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error.message);
+    return [];
+  }
+};

@@ -1,5 +1,8 @@
 import React from 'react'
+import { useContext } from 'react';
+import  DataContext  from '@/components/datacontext';
 const page = () => {
+  const {order, setOrder} = useContext(DataContext);
   return (
     <>
     <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
