@@ -5,12 +5,18 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function EarningsGraph({ data }) {
+  // Create a new object with values divided by 100
+  const adjustedData = Object.keys(data).reduce((acc, key) => {
+    acc[key] = data[key] / 100;
+    return acc;
+  }, {});
+
   const chartData = {
-    labels: Object.keys(data),
+    labels: Object.keys(adjustedData),
     datasets: [
       {
         label: 'Earnings',
-        data: Object.values(data),
+        data: Object.values(adjustedData),
         backgroundColor: 'rgba(255, 206, 86, 0.2)',
         borderColor: 'rgba(255, 206, 86, 1)',
         borderWidth: 1,
