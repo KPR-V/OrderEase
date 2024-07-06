@@ -2,12 +2,11 @@
 import { signOut, getAuth } from 'firebase/auth';
 import React, { useState, useContext } from 'react';
 import DataContext from '@/components/datacontext';
-import SocketFile from '@/components/socketfile';
+import connectsocket from '@/components/connectsocket';
 import app from "@/components/config"
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 const FeedbackPage = () => {
-  const searchParams = useSearchParams();
-  const queryTableNumber = searchParams.get("tableNumber");
+
   const [progress, setProgress] = useState(0);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -16,6 +15,13 @@ const FeedbackPage = () => {
   const auth = getAuth(app);
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
+   const socket = connectsocket();
+    
+   const sendFeedback = () => {
+    socket.emit('send-feedback', submittedData);
+  };
+
+console.log(submittedData)
 
   const copyDiscountCode = () => {
     const discountCode = "DISCOUNT2024";
@@ -75,7 +81,7 @@ const FeedbackPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      id: `${queryTableNumber + name + Math.floor(Math.random() * 1000)}`,
+      id: `${ name + Math.floor(Math.random() * 1000)}`,
       foodQuality,
       serviceQuality,
       cleanliness,
@@ -88,7 +94,7 @@ const FeedbackPage = () => {
     };
     setSubmittedData(formData);
     setIsVisible(true);
-
+    sendFeedback();
 
   };
 
@@ -291,8 +297,6 @@ const FeedbackPage = () => {
           </form>
         </div>
       </div>
-
-      {submittedData && <SocketFile data={submittedData} />}
     </>
   );
 };
