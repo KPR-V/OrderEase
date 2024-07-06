@@ -17,6 +17,14 @@ const Menu = () => {
           <Link href="/admin-dashboard/manage-menu/adddish">
             <button className="bg-custom-yellow text-black font-bold py-2 px-4 rounded-md">Add Dish</button>
               </Link>  
+              <Link href="/admin-dashboard">
+          <button
+                type="button"
+                className="bg-custom-yellow text-black font-bold py-2 px-4 rounded-md"
+              >
+                Go Back To Admin Dashboard
+              </button>
+            </Link>
               </div>
         </div>
       </div>

@@ -32,6 +32,11 @@ const AdminDashboard = async () => {
                             View Orders
                         </button>
                     </Link>
+                    <Link href="/admin-dashboard/view-feedback">
+                        <button name='feedback' type='submit' className='text-md sm:text-lg md:text-lg lg:text-xl xl:text-2xl font-changa cursor-pointer rounded-md border-3 text-black bg-pink-500 py-2 px-3 outline-none'>
+                            View Feedback
+                        </button>
+                    </Link>
                     <Link href="/admin-dashboard/track-payments">
                         <button name='payments' type='submit' className='text-md sm:text-lg md:text-lg lg:text-xl xl:text-2xl font-changa cursor-pointer rounded-md border-3 text-black bg-green-500 py-2 px-3 outline-none'>
                             Track Payments

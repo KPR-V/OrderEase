@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import EarningsGraph from '@/components/earninggraph';
 import Image from 'next/image';
-
+import Link from 'next/link';
 // Helper function to convert date to IST
 const convertToIST = (dateString) => {
   const date = new Date(dateString);
@@ -151,6 +151,14 @@ const Page = () => {
               )}
             </div>
           </div>
+          <Link href="/admin-dashboard">
+          <button
+                type="button"
+               className="bg-custom-yellow text-black font-bold py-2 px-4 rounded-md"
+              >
+                Go Back To Admin Dashboard
+              </button>
+            </Link>
         </div>
       </div>
     </>
