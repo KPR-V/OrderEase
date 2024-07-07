@@ -11,6 +11,10 @@ export const saveordereddishestodb = async (number1, dishids) => {
             return { success: false, error: 'Customer with this contact does not exist' };
         } else {
             dishids.forEach(dishid => {
+                if (existingCustomer.dishesordered.includes(dishid)){
+                    console.log('Dish with this ID already exists:', dishid);
+                    return { success: false, error: 'Dish with this ID already exists' };
+                }
                 existingCustomer.dishesordered.push(dishid);
             });
             await existingCustomer.save();

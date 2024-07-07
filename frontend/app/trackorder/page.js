@@ -21,12 +21,7 @@ const OrderStatusPage = () => {
   const instructions = filteredOrder.length > 0 ? filteredOrder[0].instructions : "N/A";
   const orderstatus = filteredOrder.length > 0 ? (filteredOrder[0].status ? filteredOrder[0].status :"Order Placed") : "N/A";
 
-if(filteredOrder.length == 0 ){
-     setTimeout(()=>{
-      router.replace('/menu') 
-     },200)
 
-}
 if(filteredOrder.length > 0 && filteredOrder[0].status === "Arriving"){
      setTimeout(()=>{
       router.replace('/feedback') 

@@ -1,18 +1,24 @@
 "use client";
 import { signOut, getAuth, onAuthStateChanged } from 'firebase/auth';
-import React, { useState, useContext, useEffect } from 'react';
-import DataContext from '@/components/datacontext';
+import React, { useState, useEffect } from 'react';
 import { saveFeedbackToDB } from '@/components/savefeedbacktodb';
 import app from "@/components/config"
 import { useRouter } from 'next/navigation';
 import { addnametocustomerindb } from '@/components/addnametocustomerindb';
+
 const FeedbackPage = () => {
 
   const [progress, setProgress] = useState(0);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-  const { foodQuality, setFoodQuality, serviceQuality, setServiceQuality, cleanliness, setCleanliness, value, setValue, experience, setExperience, comments, setComments, name, setName, email, setEmail } = useContext(DataContext);
-  const [submittedData, setSubmittedData] = useState(null);
+  const [comments, setComments] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [foodQuality, setFoodQuality] = useState('');
+  const [serviceQuality, setServiceQuality] = useState('');
+  const [cleanliness, setCleanliness] = useState('');
+  const [value, setValue] = useState('');
+  const [experience, setExperience] = useState('');
   const auth = getAuth(app);
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
@@ -33,7 +39,9 @@ const FeedbackPage = () => {
         try {
           await addnametocustomerindb(auth.currentUser.phoneNumber, name);
           await signOut(auth)
+          setTimeout(() => {
           router.replace('/')
+          },3000)
         }
         catch (error) {
           console.error('', error);
@@ -82,7 +90,7 @@ const FeedbackPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      id: `${name + Math.floor(Math.random() * 1000)}`,
+      id: `${Math.floor(Math.random() * 1000000)}`,
       foodQuality,
       serviceQuality,
       cleanliness,
@@ -93,9 +101,8 @@ const FeedbackPage = () => {
       name,
       email,
     };
-    setSubmittedData(formData);
     setIsVisible(true);
-    await saveFeedbackToDB(submittedData);
+    await saveFeedbackToDB(formData);
 
   };
 
