@@ -2,7 +2,7 @@
 import { signOut, getAuth } from 'firebase/auth';
 import React, { useState, useContext } from 'react';
 import DataContext from '@/components/datacontext';
-import connectsocket from '@/components/connectsocket';
+import { saveFeedbackToDB } from '@/components/savefeedbacktodb';
 import app from "@/components/config"
 import { useRouter } from 'next/navigation';
 const FeedbackPage = () => {
@@ -15,13 +15,7 @@ const FeedbackPage = () => {
   const auth = getAuth(app);
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
-   const socket = connectsocket();
-    
-   const sendFeedback = () => {
-    socket.emit('send-feedback', submittedData);
-  };
 
-console.log(submittedData)
 
   const copyDiscountCode = () => {
     const discountCode = "DISCOUNT2024";
@@ -81,7 +75,7 @@ console.log(submittedData)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      id: `${ name + Math.floor(Math.random() * 1000)}`,
+      id: `${name + Math.floor(Math.random() * 1000)}`,
       foodQuality,
       serviceQuality,
       cleanliness,
@@ -94,7 +88,7 @@ console.log(submittedData)
     };
     setSubmittedData(formData);
     setIsVisible(true);
-    sendFeedback();
+    await saveFeedbackToDB(submittedData);
 
   };
 

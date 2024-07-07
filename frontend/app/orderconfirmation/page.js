@@ -5,25 +5,27 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "@/components/config";
 import { useRouter } from "next/navigation";
 import DataContext from "@/components/datacontext";
-import { object, string, z } from "zod";
-import useOrderStore from "@/components/orderStore";
+import { object, z } from "zod";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "@/components/Checkout";
 import Modal from "@/components/Modal";
-
+import { saveordersToDB } from "@/components/saveorderstodb";
+import {savestatustoorders} from "@/components/savestatustodb";
 const Page = () => {
   const [isPaymentPopupVisible, setIsPaymentPopupVisible] = useState(false);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
-  const { order, setOrder, tableNumber, setTableNumber, instructions, setInstructions } = useContext(DataContext);
-  const addOrder = useOrderStore((state) => state.addOrder);
+  const { order, setOrder, tableNumber, setTableNumber, instructions, setInstructions  } = useContext(DataContext);
+ 
   const auth = getAuth(app);
   const router = useRouter();
 
   const schema = object({
     tableNumber: z.string().min(1, "Table number is required").max(3, "Table number is too long"),
   });
+
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -34,32 +36,42 @@ const Page = () => {
   }, [auth, router]);
 
   const stripePromise = useMemo(() => loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY), []);
-
   const amount = order.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-  const handlePaymentSuccess = () => {
+
+
+  const handlePaymentSuccess = async () => {
     setIsOrderConfirmed(true);
-    addOrder({ tableNumber, instructions, order });
+    await saveordersToDB({ tableNumber, order, instructions });
+    
+    try{await savestatustoorders()}
+    catch (error) {
+      console.error('Error saving status to orders:', error);
+    }
     setTimeout(() => {
       setIsOrderConfirmed(false);
       router.replace(`/trackorder?tableNumber=${tableNumber}&amount=${amount}`);
       setOrder([]);
+      setTableNumber("");
+      setInstructions("");
     }, 3000);
   };
+
+
 
   const submitOrder = async () => {
     try {
       schema.parse({ tableNumber: tableNumber.toString() });
-
-      // Fetch the client secret for the payment intent
+     
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: amount * 100 }), // Stripe expects the amount in the smallest currency unit (e.g., paise for INR)
+        body: JSON.stringify({ amount: amount * 100 }), 
       });
-
+      
+      
       const { clientSecret } = await response.json();
       setClientSecret(clientSecret);
       setIsPaymentPopupVisible(true);

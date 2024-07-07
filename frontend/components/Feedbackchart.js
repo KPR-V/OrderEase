@@ -4,7 +4,7 @@ import React, { useContext, useEffect , useState} from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import DataContext from '@/components/datacontext';
-
+import { getFeedbacksFromDB } from './getfeedbacksfromdb';
 
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
@@ -13,53 +13,13 @@ const FeedbackCharts =  () => {
 
   const { feedbackData, setFeedbackData } = useContext(DataContext);
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getFeedbacksFromDB();
+      setFeedbackData(data);
+    };
+    fetchData();
+  }, []);
 
   const countFeedback = (field) => {
     const counts = { Excellent: 0, Good: 0, Average: 0, Dissatisfied: 0 };
