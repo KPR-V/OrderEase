@@ -1,5 +1,5 @@
 "use client";
-import { signOut, getAuth } from 'firebase/auth';
+import { signOut, getAuth ,onAuthStateChanged} from 'firebase/auth';
 import React, { useState, useContext } from 'react';
 import DataContext from '@/components/datacontext';
 import { saveFeedbackToDB } from '@/components/savefeedbacktodb';
@@ -16,21 +16,26 @@ const FeedbackPage = () => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.replace("/");
+      }
+    });
+  }, [auth, router]);
 
   const copyDiscountCode = () => {
     const discountCode = "DISCOUNT2024";
     navigator.clipboard.writeText(discountCode)
       .then( async () => {
         setIsVisible(false);
-        // activate it when ready 
-
-        // try{
-        //  await signOut(auth)
-        //     router.replace('/')
-        // }
-        // catch (error) {
-        //   console.error('', error);
-        // } 
+        try{
+         await signOut(auth)
+            router.replace('/')
+        }
+        catch (error) {
+          console.error('', error);
+        } 
       })
       .catch(err => {
         console.error("Failed to copy the discount code: ", err);

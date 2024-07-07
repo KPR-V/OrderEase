@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import app from "@/components/config";
 import { ordersFromDB } from "@/components/getordersfromdb";
 const OrderStatusPage = () => {
+  const auth = getAuth(app);
   const [confirmedorder, setconfirmedorder] = useState([]);
   const searchParams = useSearchParams();
   const queryTableNumber = searchParams.get("tableNumber");
@@ -24,6 +27,14 @@ if(filteredOrder.length > 0 && filteredOrder[0].status === "Arriving"){
      },2000)
 
 }
+
+useEffect(() => {
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      router.replace("/");
+    }
+  });
+}, [auth, router]);
 
 
 
