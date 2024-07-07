@@ -1,10 +1,11 @@
 "use client";
-import { signOut, getAuth ,onAuthStateChanged} from 'firebase/auth';
-import React, { useState, useContext } from 'react';
+import { signOut, getAuth, onAuthStateChanged } from 'firebase/auth';
+import React, { useState, useContext, useEffect } from 'react';
 import DataContext from '@/components/datacontext';
 import { saveFeedbackToDB } from '@/components/savefeedbacktodb';
 import app from "@/components/config"
 import { useRouter } from 'next/navigation';
+import { addnametocustomerindb } from '@/components/addnametocustomerindb';
 const FeedbackPage = () => {
 
   const [progress, setProgress] = useState(0);
@@ -27,15 +28,16 @@ const FeedbackPage = () => {
   const copyDiscountCode = () => {
     const discountCode = "DISCOUNT2024";
     navigator.clipboard.writeText(discountCode)
-      .then( async () => {
+      .then(async () => {
         setIsVisible(false);
-        try{
-         await signOut(auth)
-            router.replace('/')
+        try {
+          await addnametocustomerindb(auth.currentUser.phoneNumber, name);
+          await signOut(auth)
+          router.replace('/')
         }
         catch (error) {
           console.error('', error);
-        } 
+        }
       })
       .catch(err => {
         console.error("Failed to copy the discount code: ", err);

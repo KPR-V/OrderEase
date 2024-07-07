@@ -21,6 +21,12 @@ const OrderStatusPage = () => {
   const instructions = filteredOrder.length > 0 ? filteredOrder[0].instructions : "N/A";
   const orderstatus = filteredOrder.length > 0 ? (filteredOrder[0].status ? filteredOrder[0].status :"Order Placed") : "N/A";
 
+if(filteredOrder.length == 0 ){
+     setTimeout(()=>{
+      router.replace('/menu') 
+     },200)
+
+}
 if(filteredOrder.length > 0 && filteredOrder[0].status === "Arriving"){
      setTimeout(()=>{
       router.replace('/feedback') 
@@ -53,7 +59,7 @@ useEffect(() => {
                 <span>Table Number :</span>
                 <span>{queryTableNumber}</span>
               </div>
-              <ul className="w-full flex gap-3 text-xl px-3 py-1 h-3/4 ">
+              <ul className="w-full flex overflow-y-scroll gap-1 text-xl flex-col px-3 py-1 h-3/4 ">
                 {filteredOrder.length > 0 && filteredOrder[0].order.map((item, index) => (
                   <li
                     key={index}

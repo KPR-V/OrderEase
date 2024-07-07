@@ -50,7 +50,7 @@ const OrderPage = () => {
               <div className="text-center text-xl text-black">No orders available</div>
             ) : (
               orders.map((order, index) => (
-                <div key={index} className='w-full flex flex-col bg-white overflow-y-overlay scrollbar-custom p-1 font-changa gap-3 h-64 rounded-lg'>
+                <div key={index} className='w-full flex flex-col bg-white overflow-y-overlay scrollbar-custom p-1 font-changa gap-3 min-h-fit rounded-lg'>
                   <div className='w-full flex justify-around gap-3 text-xl px-3 py-1 h-8 '>
                     <div>
                     <span>Table Number :</span>
@@ -64,7 +64,7 @@ const OrderPage = () => {
                     </div>
                   </div>
              
-                  <ul className='w-full flex justify-between gap-3 text-xl px-3 py-1 h-3/4 '>
+                  <ul className='w-full flex justify-between flex-col gap-1 text-xl px-3 py-1 h-3/4 '>
                     {order.order.map((item, itemIndex) => (
                       <li
                         key={itemIndex}

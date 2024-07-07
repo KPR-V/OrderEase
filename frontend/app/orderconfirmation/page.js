@@ -7,7 +7,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "@/components/config";
 import { useRouter } from "next/navigation";
 
-
+import { saveordereddishestodb } from "@/components/saveordereddishestodb";
 import DataContext from "@/components/datacontext";
 import { object, z } from "zod";
 import { loadStripe } from "@stripe/stripe-js";
@@ -20,10 +20,11 @@ const Page = () => {
   const [isPaymentPopupVisible, setIsPaymentPopupVisible] = useState(false);
   const [isOrderConfirmed, setIsOrderConfirmed] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
-  const { order, setOrder, tableNumber, setTableNumber, instructions, setInstructions  } = useContext(DataContext);
+  const { order, setOrder, tableNumber, setTableNumber, instructions, setInstructions   } = useContext(DataContext);
  
   const auth = getAuth(app);
   const router = useRouter();
+//  console.log(auth.currentUser.phoneNumber)
 
   const schema = object({
     tableNumber: z.string().min(1, "Table number is required").max(3, "Table number is too long"),
@@ -42,12 +43,12 @@ const Page = () => {
   const stripePromise = useMemo(() => loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY), []);
   const amount = order.reduce((acc, item) => acc + item.quantity * item.price, 0);
 
-
+const ids = order.map((item) => item._id);
 
   const handlePaymentSuccess = async () => {
     setIsOrderConfirmed(true);
     await saveordersToDB({ tableNumber, order, instructions });
-    
+     await saveordereddishestodb(auth.currentUser.phoneNumber, ids);
     try{await savestatustoorders()}
     catch (error) {
       console.error('Error saving status to orders:', error);
