@@ -2,12 +2,12 @@
 import { signOut, getAuth, onAuthStateChanged } from 'firebase/auth';
 import React, { useState, useEffect } from 'react';
 import { saveFeedbackToDB } from '@/components/savefeedbacktodb';
-import app from "@/components/config"
+import app from "@/components/config";
 import { useRouter } from 'next/navigation';
 import { addnametocustomerindb } from '@/components/addnametocustomerindb';
+import { getCouponFromDB } from '@/components/getcouponfromdb';
 
 const FeedbackPage = () => {
-
   const [progress, setProgress] = useState(0);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -22,7 +22,8 @@ const FeedbackPage = () => {
   const auth = getAuth(app);
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
-
+  const [couponname, setCouponName] = useState("");
+  
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -31,26 +32,43 @@ const FeedbackPage = () => {
     });
   }, [auth, router]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getCouponFromDB();
+        if (data && data.length > 0) {
+          console.log('Fetched Data:', data);
+          setCouponName(data[0].name);
+          console.log('Set coupon name:', data[0].name);
+        } else {
+          console.error('No data found');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
   const copyDiscountCode = () => {
-    const discountCode = "DISCOUNT2024";
-    navigator.clipboard.writeText(discountCode)
+    navigator.clipboard.writeText(couponname)
       .then(async () => {
         setIsVisible(false);
         try {
           await addnametocustomerindb(auth.currentUser.phoneNumber, name);
-          await signOut(auth)
+          await signOut(auth);
           setTimeout(() => {
-          router.replace('/')
-          },3000)
-        }
-        catch (error) {
-          console.error('', error);
+            router.replace('/');
+          }, 3000);
+        } catch (error) {
+          console.error('Error during sign out:', error);
         }
       })
       .catch(err => {
-        console.error("Failed to copy the discount code: ", err);
+        console.error('Failed to copy the discount code:', err);
       });
   };
+
   if (isVisible) return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-lg text-center">
@@ -60,15 +78,12 @@ const FeedbackPage = () => {
           onClick={copyDiscountCode}
           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
         >
-          DISCOUNT2024
+          {couponname}
         </button>
       </div>
     </div>
+  );
 
-  )
-
-
-    ;
   const handleInputChange = () => {
     const totalRequiredFields = 5;
     const completedFields = document.querySelectorAll('input[required]:checked').length;
@@ -103,7 +118,6 @@ const FeedbackPage = () => {
     };
     setIsVisible(true);
     await saveFeedbackToDB(formData);
-
   };
 
   return (
@@ -279,7 +293,6 @@ const FeedbackPage = () => {
                 type="email"
                 placeholder="Your email..."
                 onChange={(e) => setEmail(e.target.value)}
-
               />
             </div>
 
@@ -291,7 +304,6 @@ const FeedbackPage = () => {
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>
-
             </div>
 
             <div className="flex items-center justify-center">
