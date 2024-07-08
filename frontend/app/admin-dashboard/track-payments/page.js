@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import EarningsGraph from '@/components/earninggraph';
 import Image from 'next/image';
 import Link from 'next/link';
-// Helper function to convert date to IST
+
 const convertToIST = (dateString) => {
   const date = new Date(dateString);
-  // Get the offset from UTC in minutes and convert it to milliseconds
+  
   const offset = 5.5 * 60 * 60 * 1000;
   const istDate = new Date(date.getTime() + offset);
   return istDate.toISOString();
@@ -26,7 +26,7 @@ const Page = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // Convert each transaction's created date to IST
+        
         const transactionsWithIST = data.map(transaction => ({
           ...transaction,
           created: convertToIST(transaction.created)
@@ -44,14 +44,14 @@ const Page = () => {
   if(loading){
     return <div className="flex justify-center items-center h-screen w-full"><Image src="/loading.gif" width={100} height={100} alt="loading" /></div>
   }
-  console.log('transactions:', transactions);
+ 
 
-  // Get today's date in IST (without time part)
+  
   const todayISOString = new Date().toISOString();
-  const today = convertToIST(todayISOString).slice(0, 10); // Format as yyyy-mm-dd
-  console.log('today:', today);
+  const today = convertToIST(todayISOString).slice(0, 10); 
+  
 
-  // Filter transactions for today (in IST)
+  
   const todaysTransactions = transactions.filter(transaction => transaction.created.slice(0, 10) === today);
 
   const formatDateToMonth = date => date.slice(0, 7);
@@ -92,7 +92,7 @@ const Page = () => {
               </div>
               <div className="border flex flex-col justify-around border-yellow-400 p-4">
                 <h2 className="text-2xl font-changa mb-4">Money Earned Per {viewWeek ? "Day" : "Month"}</h2>
-                <div className="text-left">
+                <div className="text-left overflow-y-overlay scrollbar-custom">
                   {Object.entries(aggregateEarnings).map(([date, totalAmount], index) => (
                     <div key={`${date}-${index}`} className="mb-2 flex justify-around font-semibold">
                       <span>{date}: </span> <span className='text-green-500'> ₹ {totalAmount / 100}</span>

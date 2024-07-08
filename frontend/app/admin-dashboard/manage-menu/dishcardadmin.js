@@ -101,9 +101,9 @@ const DishCard = () => {
                   <button onClick={() => handleDeleteDish(dish._id)} className="bg-red-500 hover:bg-red-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
                     Delete
                   </button>
-                  <button className="bg-blue-500 hover:bg-blue-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  {/* <button className="bg-blue-500 hover:bg-blue-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
                     Like
-                  </button>
+                  </button> */}
                 </div>
 
               </div>
