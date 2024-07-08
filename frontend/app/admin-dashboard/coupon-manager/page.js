@@ -8,7 +8,7 @@ const CouponManagement = () => {
     useEffect(() => {
         const fetchData = async () => {
             const data = await getCouponFromDB();
-            console.log("data",data);
+            console.log("data", data);
             setCoupons(data);
         };
         fetchData();
@@ -44,6 +44,14 @@ const CouponManagement = () => {
                             className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
                         >
                             Add Coupon
+                        </button>
+                    </Link>
+                    <Link href="/admin-dashboard">
+                        <button
+                            type="button"
+                            className="bg-custom-yellow text-black font-bold py-2 px-4 rounded-md"
+                        >
+                            Go Back To Admin Dashboard
                         </button>
                     </Link>
                 </div>
