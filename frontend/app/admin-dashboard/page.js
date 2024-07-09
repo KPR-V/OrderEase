@@ -15,7 +15,7 @@ const AdminDashboard = async () => {
                     <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-black text-black font-bungee">
                         Admin Dashboard
                     </h1>
-                    <p className="text-md sm:text-lg md:text-xl lg:text-xl xl:text-xl font-changa font-black">
+                    <p className="text-md sm:text-lg md:text-xl lg:text-xl xl:text-xl font-changa text-black font-black">
                         Welcome {user.name}
                     </p>
                     <img className='rounded-lg' width={88} height={88} src={user.image}

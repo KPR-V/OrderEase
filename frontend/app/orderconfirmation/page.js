@@ -142,7 +142,7 @@ const Page = () => {
                   <span> ₹{item.quantity * item.price}</span>
                 </li>
               ))}
-              <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold flex justify-between items-center mt-3 md:mt-5">
+              <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold flex text-black justify-between items-center mt-3 md:mt-5">
                 <span>Total:</span>
                 <span>₹{amount}</span>
               </h2>
@@ -152,7 +152,7 @@ const Page = () => {
                     <span>Discount ({couponcode}):</span>
                     <span>-₹{amount - discountedAmount}</span>
                   </h2>
-                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold flex justify-between items-center mt-3 md:mt-5">
+                  <h2 className="text-lg md:text-xl lg:text-2xl font-extrabold text-black flex justify-between items-center mt-3 md:mt-5">
                     <span>Total after discount:</span>
                     <span>₹{discountedAmount}</span>
                   </h2>

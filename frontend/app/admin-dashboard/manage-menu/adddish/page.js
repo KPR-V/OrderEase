@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { handlesubmit } from "./handlesubmit";
 import { useEdgeStore } from "@/components/edgestore";
-
+import Link from "next/link";
 const AddDish = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [description, setDescription] = useState("");
@@ -28,6 +28,7 @@ const AddDish = () => {
 
     try {
       await filesubmit();
+      router.replace('/admin-dashboard/manage-menu'); 
     } catch (error) {
       console.error("Error submitting form:", error.message);
     }
@@ -77,8 +78,8 @@ const AddDish = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen ">
-      <div className="flex bg-slate-500/40 backdrop-blur-md w-2/3 flex-col items-center gap-7 h-full rounded-lg p-5">
-        <h2 className="text-black font-bungee font-bold text-3xl mt-3">Add New Dish</h2>
+      <div className="flex bg-slate-500/40 backdrop-blur-md w-2/3 flex-col items-center gap-7 h-full rounded-lg p-2">
+        <h2 className="text-black font-bungee font-bold text-3xl mt-1">Add New Dish</h2>
         <div className="w-full max-w-lg mx-auto">
           <div
             className="w-full h-64 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md bg-slate-400/50"
@@ -184,7 +185,14 @@ const AddDish = () => {
                 />
               </div>
             </div>
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-between mt-4">
+              <Link href="/admin-dashboard/manage-menu">
+                <button type="button" className="py-2 px-4 bg-slate-800 text-white rounded-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Go Back
+
+                </button>
+
+              </Link>
               <button
                 type="submit"
                 className="py-2 px-4 bg-slate-800 text-white rounded-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

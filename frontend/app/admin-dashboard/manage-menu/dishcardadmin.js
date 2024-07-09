@@ -7,7 +7,7 @@ import { deleteDish } from '@/components/getdishesfromdb';
 import { useRouter } from 'next/navigation';
 const DishCard = () => {
   const [dishes, setDishes] = useState([]);
-  // const [quantity, setQuantity] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(false);
 
   const router = useRouter();
@@ -15,14 +15,13 @@ const DishCard = () => {
     const fetchDishes = async () => {
       const dishesData = await getdishesfromdb();
       setDishes(dishesData);
+      setLoading(false);
     };
 
     fetchDishes();
   }, []);
 
-  // const addItemToOrder = (dish, quantity) => {
-  //   setOrder([...order, { ...dish, quantity }]);
-  // };
+  
 
   const handleDeleteDish = async (id) => {
     try {
@@ -37,8 +36,8 @@ const DishCard = () => {
 
   return (
     <>
-
-      {dishes.length === 0 ? (
+    {loading && <h1 className="text-3xl font-bungee font-bold text-center text-black">Loading...</h1>}
+      {(dishes.length === 0 && !loading) ? (
         <h1 className="text-3xl font-bungee font-bold text-center text-black">No dishes found</h1>
       ) : (
         dishes.map((dish, index) => (
@@ -69,27 +68,10 @@ const DishCard = () => {
 
                 <div className={`flex flex-col lg:flex-row text-sm justify-center w-full items-center ${expanded ? "gap-2 pb-2" : "gap-3"} `}>
                   <div className=" items-center justify-center gap-2">
-                    {/* <label className="text-sm font-bold mb-2 lg:mb-2 flex items-center">
-                      Quantity:
-                      <input
-                        type="number"
-                        value={quantity}
-                        onChange={(e) => setQuantity(Number(e.target.value))}
-                        min={0}
-                        className="shadow appearance-none border text-center rounded w-full py-1 px-2 leading-tight focus:outline-none focus:shadow-outline ml-2"
-                        style={{ minWidth: '50px' }}
-                      />
-                    </label> */}
+                    
                     <span className='mb-2 lg:mb-0 lg:ml-2'> Price: ₹ {dish.price} </span>
                   </div>
-                  {/* {quantity > 0 && (
-                    <button
-                      className="bg-red-500 hover:bg-red-700 text-black font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 lg:mt-0 w-full lg:w-auto"
-                      onClick={() => addItemToOrder(dish.name, quantity)}
-                    >
-                      Add Item
-                    </button>
-                  )} */}
+                  
                 </div>
                 <div className='flex justify-around w-full text-black'>
                   <Link href={`/admin-dashboard/manage-menu/editdish/${dish._id}`}>
@@ -98,12 +80,10 @@ const DishCard = () => {
                     </button>
                   </Link>
 
-                  <button onClick={() => handleDeleteDish(dish._id)} className="bg-red-500 hover:bg-red-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
+                  <button onClick={() => handleDeleteDish(dish._id)} className="bg-red-500 hover:bg-red-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-1/3 lg:w-auto">
                     Delete
                   </button>
-                  {/* <button className="bg-blue-500 hover:bg-blue-700  font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline mt-2 w-full lg:w-auto">
-                    Like
-                  </button> */}
+      
                 </div>
 
               </div>

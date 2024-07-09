@@ -3,8 +3,8 @@ import FeedbackCharts from '@/components/Feedbackchart';
 import Link from 'next/link';
 const DisplayPage = () => {
   return (
-    <div className="w-full min-h-screen p-2 flex justify-center items-center flex-col font-changa">
-      <div className="w-full md:w-2/3 gap-3 h-auto flex justify-center items-center bg-slate-800/50 backdrop-blur-sm flex-col font-changa p-4">
+    <div className="w-full min-h-screen p-1 flex justify-center items-center flex-col font-changa">
+      <div className="w-full md:w-2/3 gap-3 h-auto flex justify-center items-center bg-slate-800/50 backdrop-blur-sm flex-col font-changa p-3">
         <h1 className="text-2xl md:text-3xl text-blue-400 font-bold mb-3">Customer Feedback</h1>
         <FeedbackCharts />
         <Link href="/admin-dashboard">

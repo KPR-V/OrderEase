@@ -71,7 +71,7 @@ const FeedbackPage = () => {
 
   if (isVisible) return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-lg text-center">
+      <div className="bg-white p-6 text-black rounded shadow-lg text-center">
         <h2 className="text-2xl font-bold mb-4">Thank You for Visiting!</h2>
         <p className="mb-4">Here is your discount code for next time:</p>
         <button
@@ -122,121 +122,45 @@ const FeedbackPage = () => {
 
   return (
     <>
-      <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Changa" rel="stylesheet" />
 
-      <div className="min-h-screen flex font-changa justify-center items-center">
+      <div className="min-h-screen flex font-changa justify-center items-center p-4">
         <div className="p-6 rounded-lg bg-slate-50/60 backdrop-blur-md shadow-lg w-full md:w-2/3 lg:w-1/2">
-          <div className="mb-6">
+          <div className="mb-6 text-center">
             <h1 className="text-2xl font-bold text-green-600">Please Review Us</h1>
             <p className="text-gray-600">Please let us know how was the food and service.</p>
           </div>
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Food Quality <span className="text-red-600">*</span>
-              </label>
-              <div className="flex space-x-4">
-                {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
-                  <label key={option} className="flex items-center justify-evenly w-full font-bold">
-                    <input
-                      type="radio"
-                      name="foodQuality"
-                      value={option}
-                      required
-                      onChange={(e) => { setFoodQuality(e.target.value); handleInputChange(); }}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                ))}
+            {[
+              { label: 'Food Quality', value: foodQuality, setValue: setFoodQuality },
+              { label: 'Overall Service Quality', value: serviceQuality, setValue: setServiceQuality },
+              { label: 'Cleanliness', value: cleanliness, setValue: setCleanliness },
+              { label: 'Value', value: value, setValue: setValue },
+              { label: 'Overall Experience', value: experience, setValue: setExperience }
+            ].map(({ label, value, setValue }) => (
+              <div className="mb-4" key={label}>
+                <label className="block text-gray-700 font-bold mb-2">
+                  {label} <span className="text-red-600">*</span>
+                </label>
+                <div className="flex flex-wrap md:flex-nowrap gap-2 text-black">
+                  {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
+                    <label key={option} className="flex items-center w-1/2 md:w-1/4">
+                      <input
+                        type="radio"
+                        name={label.replace(' ', '').toLowerCase()}
+                        value={option}
+                        required
+                        onChange={(e) => { setValue(e.target.value); handleInputChange(); }}
+                        className="mr-2"
+                      />
+                      {option}
+                    </label>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Overall Service Quality <span className="text-red-600">*</span>
-              </label>
-              <div className="flex space-x-4">
-                {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
-                  <label key={option} className="flex items-center justify-evenly w-full font-bold">
-                    <input
-                      type="radio"
-                      name="serviceQuality"
-                      value={option}
-                      required
-                      onChange={(e) => { setServiceQuality(e.target.value); handleInputChange(); }}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Cleanliness <span className="text-red-600">*</span>
-              </label>
-              <div className="flex space-x-4">
-                {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
-                  <label key={option} className="flex items-center justify-evenly w-full font-bold">
-                    <input
-                      type="radio"
-                      name="cleanliness"
-                      value={option}
-                      required
-                      onChange={(e) => { setCleanliness(e.target.value); handleInputChange(); }}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Value <span className="text-red-600">*</span>
-              </label>
-              <div className="flex space-x-4">
-                {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
-                  <label key={option} className="flex items-center justify-evenly w-full font-bold">
-                    <input
-                      type="radio"
-                      name="value"
-                      value={option}
-                      required
-                      onChange={(e) => { setValue(e.target.value); handleInputChange(); }}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2">
-                Overall Experience <span className="text-red-600">*</span>
-              </label>
-              <div className="flex space-x-4">
-                {["Excellent", "Good", "Average", "Dissatisfied"].map((option) => (
-                  <label key={option} className="flex items-center justify-evenly w-full font-bold">
-                    <input
-                      type="radio"
-                      name="experience"
-                      value={option}
-                      required
-                      onChange={(e) => { setExperience(e.target.value); handleInputChange(); }}
-                      className="mr-2"
-                    />
-                    {option}
-                  </label>
-                ))}
-              </div>
-            </div>
+            ))}
 
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2">
@@ -264,7 +188,7 @@ const FeedbackPage = () => {
                 Any comments, questions or suggestions?
               </label>
               <textarea
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border text-black rounded-lg"
                 rows="4"
                 placeholder="Your comments..."
                 onChange={(e) => setComments(e.target.value)}
@@ -276,7 +200,7 @@ const FeedbackPage = () => {
                 Name <span className="text-red-600">*</span>
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 text-black border rounded-lg"
                 type="text"
                 placeholder="Your name..."
                 onChange={(e) => setName(e.target.value)}
@@ -289,7 +213,7 @@ const FeedbackPage = () => {
                 Email
               </label>
               <input
-                className="w-full px-3 py-2 border rounded-lg"
+                className="w-full px-3 py-2 border text-black rounded-lg"
                 type="email"
                 placeholder="Your email..."
                 onChange={(e) => setEmail(e.target.value)}

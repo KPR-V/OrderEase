@@ -87,7 +87,7 @@ useEffect(() => {
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
                 </svg>
                 <button
-                  className="text-lg bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none rounded-lg px-5 py-2.5"
+                  className="text-md bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none rounded-lg px-3 py-2"
                 >
                   {orderstatus}
                 </button>

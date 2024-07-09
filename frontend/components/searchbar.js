@@ -36,25 +36,30 @@ const SearchForm = ({ setFilteredDishes, setSearchQuery }) => {
   };
 
   return (
-    <form className="w-2/3 mx-auto outline-none bg-zinc-800 font-changa">
-      <div className="flex relative">
+    <div className="w-full md:w-2/3 mx-auto px-4">
+    <form className="outline-none rounded-lg">
+      <div className="flex flex-wrap justify-center md:flex-nowrap relative">
         <button
           id="dropdown-button"
           onClick={toggleDropdown}
-          className="flex-shrink-0 z-20 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-200 bg-gray-700 rounded-s-lg hover:bg-gray-600 focus:ring-4 focus:outline-none"
+          className="flex-shrink-0 z-20 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-200 bg-gray-700 rounded-t-lg md:rounded-l-lg md:rounded-t-none hover:bg-gray-600 focus:ring-4 focus:outline-none"
           type="button"
         >
-          All categories{' '}
-          <svg className="w-2.5 h-2.5 ms-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          All categories
+          <svg className="w-2.5 h-2.5 ml-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
           </svg>
         </button>
         {dropdownVisible && (
-          <div ref={dropdownRef} className="absolute top-full mt-2 z-30 bg-zinc-700 divide-y divide-gray-600 rounded-lg shadow w-44">
+          <div ref={dropdownRef} className="absolute top-full mt-1 left-0 z-30 bg-zinc-700 divide-y divide-gray-600 rounded-lg shadow w-44">
             <ul className="py-2 text-sm text-gray-200" aria-labelledby="dropdown-button">
               {categories.map((category, index) => (
                 <li key={index}>
-                  <button type="button" onClick={() => handleCategoryClick(category)} className="inline-flex w-full px-4 py-2 hover:bg-gray-600">
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryClick(category)}
+                    className="inline-flex w-full px-4 py-2 hover:bg-gray-600"
+                  >
                     {category}
                   </button>
                 </li>
@@ -62,17 +67,18 @@ const SearchForm = ({ setFilteredDishes, setSearchQuery }) => {
             </ul>
           </div>
         )}
-        <div className="relative w-full">
+        <div className="relative w-full mt-2 md:mt-0">
           <input
             type="search"
             id="search-dropdown"
             onChange={handleSearch}
-            className="block p-2.5 w-full z-10 text-sm bg-gray-700 text-gray-200 border border-gray-600 rounded-e-lg"
+            className="block p-2.5 w-full z-10 text-sm bg-gray-700 text-gray-200 border border-gray-600 rounded-b-lg md:rounded-r-lg md:rounded-b-none"
             placeholder="Search for dishes"
           />
         </div>
       </div>
     </form>
+  </div>
   );
 };
 

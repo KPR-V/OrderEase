@@ -11,10 +11,12 @@ const DishCard = ({ filteredDishes, searchQuery, number }) => {
   const [expanded, setExpanded] = useState(false);
   const { order, setOrder } = useContext(DataContext);
   const [likes, setLikes] = useState({});
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchDishes = async () => {
       const dishesData = await getdishesfromdb();
       setDishes(dishesData);
+      setLoading(false);
     };
     fetchDishes();
   }, []);
@@ -77,13 +79,14 @@ const DishCard = ({ filteredDishes, searchQuery, number }) => {
     }
   };
   return (
-    <>
-      {displayedDishes.length === 0 ? (
+    <> 
+    {loading && <h1 className="text-3xl font-bungee font-bold text-center text-black">Loading...</h1>}
+      {(displayedDishes.length === 0 && !loading) ? (
         <h1 className="text-3xl font-bungee font-bold text-center text-black">No dishes found</h1>
       ) : (
         displayedDishes.map((dish, index) => (
           <React.Fragment key={index}>
-            <div className={`w-full min-h-[320px] items-center flex flex-col lg:flex-row gap-3 text-black font-extrabold rounded-lg bg-slate-50 transition-all duration-300 ${expanded ? 'h-auto overflow-y-overlay max-h-96 no-scrollbar' : 'h-64 overflow-y-overlay scrollbar-custom'}`}>
+            <div className={`w-full min-h-[320px] items-center flex flex-col lg:flex-row gap-3 text-black font-extrabold rounded-lg bg-slate-50 transition-all duration-300 ${expanded ? 'h-auto overflow-y-scroll max-h-96 no-scrollbar' : 'h-64 overflow-y-scroll scrollbar-custom'}`}>
               <div className={`w-2/3 h-full md:h-3/4 lg:w-1/2 flex-shrink-0 ${expanded ? 'h-64 md:h-60 lg:h-96' : 'h-48 lg:h-full'}`}>
                 <Image
                   src={dish.image}

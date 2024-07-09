@@ -101,7 +101,7 @@ const FeedbackCharts =  () => {
    
     <div className="w-full h-full flex justify-center items-center flex-col font-changa">
     <div className="w-full min-h-fit md:w-2/3 h-full flex justify-center items-center bg-slate-800/50 backdrop-blur-sm flex-col font-changa">
-      <h1 className="text-3xl text-blue-500 font-bold mb-6">Feedback Data Visualization</h1>
+      <h1 className="text-xl lg:text-3xl text-blue-500 font-bold mb-6">Feedback Data Visualization</h1>
       <div className='flex flex-col w-full md:w-3/4 justify-center items-center'>
         <div className="mb-6">
           <h2 className="text-xl text-blue-400 font-bold mb-4">Feedback Summary</h2>
