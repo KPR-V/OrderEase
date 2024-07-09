@@ -5,9 +5,9 @@ export const savestatustoorders = async () => {
     try {
         await connectdb();
         const orders = await OrderModel.find({});
-        console.log('orders:', orders);
+        
         if (orders.length === 0) {
-            console.log('No orders found');
+            
             return;
         }
 

@@ -37,9 +37,13 @@ const FeedbackPage = () => {
       try {
         const data = await getCouponFromDB();
         if (data && data.length > 0) {
-          console.log('Fetched Data:', data);
-          setCouponName(data[0].name);
-          console.log('Set coupon name:', data[0].name);
+          
+          
+          setCouponName(()=>{
+            data.sort((a,b)=>a.discount-b.discount)
+            return data[0].name
+          });
+          
         } else {
           console.error('No data found');
         }

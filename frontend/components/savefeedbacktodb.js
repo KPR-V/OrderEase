@@ -13,7 +13,7 @@ export const saveFeedbackToDB = async (data) => {
         }
         const feedbackExists = feedbackDoc.feedbacks.some(feedback => feedback.id === id);
         if (feedbackExists) {
-            console.log('Feedback with this ID already exists:', id);
+            
             return;
         }
         feedbackDoc.feedbacks.push(data);

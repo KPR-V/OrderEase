@@ -24,7 +24,7 @@ export const getDishById = async (id) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       throw new Error('Invalid ID format');
     }
-    const dish = await Dish.findById(id).lean();  // Use lean() to return a plain object
+    const dish = await Dish.findById(id).lean(); 
     if (!dish) {
       throw new Error('Dish not found');
     }

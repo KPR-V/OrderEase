@@ -30,11 +30,6 @@ const HomePage = () => {
           </div>
           <div className='w-full lg:w-1/3 flex flex-col justify-center items-center gap-5'>
             <Loginforcustomer />
-            {/* <Link href="/menu">
-              <button type='submit' className='text-sm sm:text-lg md:text-lg lg:text-xl xl:text-2xl font-changa cursor-pointer rounded-md border-3 text-black bg-custom-red py-2 px-3 outline-none'>
-                View Menu
-              </button>
-            </Link> */}
           </div>
         </div>
       </div>

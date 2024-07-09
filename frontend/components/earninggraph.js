@@ -1,11 +1,11 @@
-// components/EarningsGraph.js
+
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default function EarningsGraph({ data }) {
-  // Create a new object with values divided by 100
+  
   const adjustedData = Object.keys(data).reduce((acc, key) => {
     acc[key] = data[key] / 100;
     return acc;

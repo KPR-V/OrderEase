@@ -13,7 +13,6 @@ export async function GET(req) {
                 limit: 100,
                 ...(startingAfter && { starting_after: startingAfter }), 
             });
-console.log('response',response)
             charges = charges.concat(response.data);
             hasMore = response.has_more;
             if (hasMore) {
@@ -36,8 +35,6 @@ console.log('response',response)
             billing_phone: charge.billing_details.phone, 
             receipt_url: charge.receipt_url, 
         }));
-console.log('sucessfulcharges',successfulCharges)
-       console.log('data:', data);
 
         return NextResponse.json(data);
     } catch (error) {

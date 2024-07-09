@@ -48,7 +48,7 @@ const EditDishPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!description || !name || !price || !category) {
-      console.log("Please fill all fields");
+    
       return;
     }
 
@@ -94,7 +94,6 @@ const EditDishPage = () => {
         image: fileUrl ? fileUrl : image,
       });
       if(result.success){
-        console.log("Dish updated successfully");
         router.replace("/admin-dashboard/manage-menu");
 
       }

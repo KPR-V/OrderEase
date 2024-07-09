@@ -8,7 +8,7 @@ export const deleteordersFromDB = async (tablenumber) => {
         await connectdb();
         const orders = await order.find({});
         if (!orders[0]) {
-            console.log('No orders found');
+           
             return;
         }
         if (tablenumber) {

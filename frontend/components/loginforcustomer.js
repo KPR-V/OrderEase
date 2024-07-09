@@ -56,7 +56,7 @@ const LoginForCustomer = () => {
       numberSchema.parse({ formattedPhoneNumber: formattedPhoneNumberTemp });
       const confirmation = await signInWithPhoneNumber(auth, formattedPhoneNumberTemp, window.recaptchaVerifier);
       setConfirmationResult(confirmation);
-      setFormattedPhoneNumber(formattedPhoneNumberTemp); // Save the formatted phone number
+      setFormattedPhoneNumber(formattedPhoneNumberTemp);
       setOtpSent(true);
       setPhoneNumber('');
       alert('OTP sent successfully');
@@ -71,8 +71,8 @@ const LoginForCustomer = () => {
       otpSchema.parse({ otp });
       await confirmationResult.confirm(otp);
       try {
-        await saveCustomerToDB(formattedPhoneNumber); // Use the saved formatted phone number
-        console.log('Customer saved to DB');
+        await saveCustomerToDB(formattedPhoneNumber); 
+        
       } catch (error) {
         console.error(error);
         alert(error.message);

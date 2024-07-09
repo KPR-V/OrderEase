@@ -7,18 +7,18 @@ export const saveordereddishestodb = async (number1, dishids) => {
         await connectdb();
         const existingCustomer = await customer.findOne({ contact: number1 });
         if (!existingCustomer) {
-            console.log('Customer with this contact does not exist:', number1);
+            
             return { success: false, error: 'Customer with this contact does not exist' };
         } else {
             dishids.forEach(dishid => {
                 if (existingCustomer.dishesordered.includes(dishid)){
-                    console.log('Dish with this ID already exists:', dishid);
+                    
                     return { success: false, error: 'Dish with this ID already exists' };
                 }
                 existingCustomer.dishesordered.push(dishid);
             });
             await existingCustomer.save();
-            console.log('Dishes added to customer:', existingCustomer);
+            
             return { success: true };
         }
     } catch (error) {

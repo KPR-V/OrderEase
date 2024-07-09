@@ -43,7 +43,7 @@ const Page = () => {
       try {
         const coupons = await getCouponFromDB();
         setCoupons(coupons);
-        console.log(coupons);
+        
       } catch (error) {
         console.error("Error getting coupon from DB:", error);
       }

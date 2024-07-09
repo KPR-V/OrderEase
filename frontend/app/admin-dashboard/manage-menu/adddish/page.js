@@ -49,11 +49,11 @@ const AddDish = () => {
         throw new Error("Invalid file type or extension");
       }
 
-      console.log("Starting file upload:", uploadedFile);
+      
 
       const res = await edgestore.publicFiles.upload({ file: uploadedFile });
 
-      console.log("File upload response:", res);
+      
 
       if (!res || !res.url) {
         throw new Error("File upload failed: Invalid response");

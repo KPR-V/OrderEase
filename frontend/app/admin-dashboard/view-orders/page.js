@@ -23,14 +23,14 @@ const OrderPage = () => {
 
   const handleCookingClick = async (tableNumber) => {
     await changestatustodb('Cooking', tableNumber);
-    await updateOrders(); // Update orders state after changing status
+    await updateOrders(); 
   };
 
   const handleArrivingClick = async (tableNumber) => {
     await changestatustodb('Arriving', tableNumber);
     setTimeout(async () => {
       await handleDeleteClick(tableNumber);
-      await updateOrders(); // Update orders state after deleting order
+      await updateOrders(); 
     }, 5000);
   };
 

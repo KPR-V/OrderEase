@@ -28,16 +28,16 @@ const EditCoupon = ({ params }) => {
     useEffect(() => {
         const fetchData = async () => {
             const couponName = params?.couponName ? decodeURIComponent(params.couponName) : '';
-            console.log("Coupon name from params:", couponName);
+            
 
             const data = await getCouponFromDB();
-            console.log("Data fetched from DB:", data);
+            
 
-            // Check if data is an array
+            
             if (Array.isArray(data) && data.length > 0) {
-                console.log("true");
+                
                 const matchingCoupon = data.find(coupon => coupon.name.trim() === couponName.trim());
-                console.log("Matching coupon:", matchingCoupon);
+                
                 if (matchingCoupon) {
                     setInitialData(matchingCoupon);
                 }
@@ -59,7 +59,7 @@ const EditCoupon = ({ params }) => {
 const router= useRouter();
 
     const onSubmit = async (data) => {
-        console.log(data);
+        
         try {
             await editCouponAndDB(data);
             router.replace('/admin-dashboard/coupon-manager');

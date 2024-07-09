@@ -2,18 +2,26 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCouponFromDB } from '@/components/getcouponfromdb';
-
+import { deleteCouponFromDB } from '@/components/deletecouponfromdb';
 const CouponManagement = () => {
     const [coupons, setCoupons] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
             const data = await getCouponFromDB();
-            console.log("data", data);
             setCoupons(data);
         };
         fetchData();
     }, [])
 
+    const handleDelete = async (name) => {
+        try{
+            await deleteCouponFromDB(name);
+            const data = await getCouponFromDB();
+            setCoupons(data);
+        } catch (error) {
+            console.error('Error handling feedback:', error);
+        }
+    }   
     return (
         <>
             <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet" />
@@ -29,6 +37,8 @@ const CouponManagement = () => {
                                     <p>Discount: {coupon.discount}%</p>
                                     <p>Expiry: {coupon.expiry}</p>
                                 </div>
+                                <div className='flex gap-3'>
+
                                 <Link href={`/admin-dashboard/coupon-manager/editcoupon/${encodeURIComponent(coupon.name)}`}>
                                     <button
                                         className="bg-yellow-500 text-white px-4 py-2 rounded"
@@ -36,6 +46,13 @@ const CouponManagement = () => {
                                         Edit
                                     </button>
                                 </Link>
+                                <button
+                                onClick={() =>{ handleDelete(coupon.name)}}
+                                        className="bg-red-500 text-white px-4 py-2 rounded"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>
