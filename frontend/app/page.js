@@ -24,7 +24,7 @@ const HomePage = () => {
             <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-4xl font-black text-black font-bungee">
               Welcome to Mocha Cafe
             </h1>
-            <p className="text-sm sm:text-lg md:text-xl lg:text-xl xl:text-xl font-changa font-black">
+            <p className="text-sm sm:text-lg md:text-xl lg:text-xl xl:text-xl text-black font-changa font-black">
               Browse our menu and place your order effortlessly.
             </p>
           </div>
