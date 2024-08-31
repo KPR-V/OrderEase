@@ -16,7 +16,7 @@
     "@stripe/react-stripe-js": "^2.7.3",
     "@stripe/stripe-js": "^4.1.0",
     "@vercel/speed-insights": "^1.0.12",
-    "axios": "^1.7.2",
+    "axios": "^1.7.4",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.3",
     "firebase": "^10.12.2",
